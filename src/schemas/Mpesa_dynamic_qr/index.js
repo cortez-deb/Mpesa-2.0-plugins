@@ -19,7 +19,10 @@ const data_schema = object({
         }),
         Size: string({
             required_error: "Please provide a valid Size"
-        })
+        }),
+        access_token: string({
+            required_error: "Please provide a valid access_token"
+        }),
     })
 });
 

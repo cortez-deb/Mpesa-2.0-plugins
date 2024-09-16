@@ -4,7 +4,7 @@ import 'dotenv/config';
 import route from '../src/routes/Mpesa_auth/index.js'; 
 import route_qr from '../src/routes/Mpesa_Dynamic_qr/index.js'
 import route_stk from '../src/routes/M-Express/index.js'
-
+import b2croute from '../src/routes/M-B2c/index.js'
 const app = Express();
 /**
  * Consfigure the cores to accept requests from defined IPs and domains
@@ -34,6 +34,7 @@ app.get('/', (req, res) => res.send('Welcome to the Mpesa APIs Microservice'));
 app.use(`${api_version}`, route);
 app.use(`${api_version}`, route_qr);
 app.use(`${api_version}`, route_stk);
+app.use(`${api_version}`, b2croute);
 
 
 export default app;
