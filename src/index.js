@@ -6,12 +6,13 @@ import route_qr from '../src/routes/Mpesa_Dynamic_qr/index.js'
 import route_stk from '../src/routes/M-Express/index.js'
 import b2croute from '../src/routes/M-B2c/index.js'
 const app = Express();
+
 /**
  * Consfigure the cores to accept requests from defined IPs and domains
  */
 app.use(
   cors({
-    origin: ['http://localhost:3000' /**Add more domains to the allowed list */],
+    origin: ['http://localhost:3000','https://healthy-falcon-greatly.ngrok-free.app' /**Add more domains to the allowed list */],
     credentials: true,
   })
 );
@@ -20,7 +21,6 @@ app.use(
  * Configure your application to use json
  */
 app.use(Express.json());
-
 /** 
  * @description 
  * Configure your api routes here

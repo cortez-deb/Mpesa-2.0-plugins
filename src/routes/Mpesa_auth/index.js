@@ -15,6 +15,7 @@ class MpesaAuthorizationRoutes {
       validate(data_schema),
       this.getAuthorization.bind(this)
     );
+ 
   }
 
   async getAuthorization(req, res) {

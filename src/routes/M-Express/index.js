@@ -23,6 +23,15 @@ class stkPushRouter {
       validate(data_schema),
       this.stkPush_Controller.bind(this)
     );
+    this.router.post(
+      "/stkpush/response",
+      this.stkPushResponse_Controller.bind(this)
+    );
+    this.router.get(
+      "/stkpush/response/retrieve/:MerchantRequestID",
+      this.stkPushResponse_retrieve.bind(this)
+    );
+
   }
   /**
    * 
@@ -33,6 +42,13 @@ class stkPushRouter {
    */
   async stkPush_Controller(req, res) {
     await Mpesa_stk_push_controller.intitiateStkPush(req, res);
+  }
+  async stkPushResponse_Controller(req, res) {
+  await Mpesa_stk_push_controller.handleResponse(req, res);
+  }
+
+  async stkPushResponse_retrieve(req, res) {
+    await Mpesa_stk_push_controller.getStkPushResponse(req, res);
   }
  
 }

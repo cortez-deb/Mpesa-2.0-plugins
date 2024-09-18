@@ -13,7 +13,7 @@ class stkPush {
         `${data?.BusinessShortCode}${data?.ConsumerSecret}${this.Timestamp}`
         ).toString("base64");
       
-      data = { ...data, Password: Password };
+      data = { ...data, Password: "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjQwOTE4MTcwOTQ4" };
       const responce = await axios.post(
         `https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest`,
         data,

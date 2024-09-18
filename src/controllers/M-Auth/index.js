@@ -19,6 +19,18 @@ class MpesaAuthorizationController {
             res.status(500).json({ error: error.message });
           }
     }
+    async generateAccessToken(consumerKey, consumerSecret){
+      try { 
+        const token = await ClientCredentials.getAccessToken(
+        consumerKey,
+        consumerSecret
+        );
+       return token?.access_token
+      } catch (error) {
+     // console.error(error)
+      }
+    }
 }
+
 
 export default new MpesaAuthorizationController();
