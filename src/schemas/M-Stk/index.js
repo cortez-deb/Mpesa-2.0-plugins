@@ -32,9 +32,6 @@ const data_schema = object({
     authToken: string({
       required_error: "Please provide a valid authToken",
     }),
-    BusinessShortCode: number({
-        required_error: "Please provide a valid BusinessShortCode",
-    }),
     ConsumerSecret: string({
         required_error: "Please provide a valid consumer secret key",
     })

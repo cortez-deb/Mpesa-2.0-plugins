@@ -2,6 +2,7 @@ import data_schema from "../../schemas/M-b2c/index.js";
 import validate from "../../middlewares/Resourse/index.js";
 import Express from 'express'
 import b2c_controller from '../../controllers/M-b2c/index.js'
+const api = "/api/v1";
 class MpesaB2CRoutes {
     constructor() {
         this.router = Express.Router();
@@ -9,7 +10,7 @@ class MpesaB2CRoutes {
     }
     initializeRoutes() {
         this.router.post(
-            "/b2c",
+            `${api}/b2c/`,
             validate(data_schema),
             this.b2c_route.bind(this)
         );

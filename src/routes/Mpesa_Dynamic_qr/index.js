@@ -3,6 +3,7 @@ import data_schema from "../../schemas/Mpesa_dynamic_qr/index.js";
 import validate from "../../middlewares/Resourse/index.js";
 import Mpesa_dynamic_qr_code_Ctrl from "../../controllers/Dynamic Qr/index.js";
 
+const api = "/api/v1";
 class Mpesa_dynamic_qr_code {
   /**
    * @description
@@ -19,7 +20,7 @@ class Mpesa_dynamic_qr_code {
    */
   initializeRoutes() {
     this.router.post(
-      "/generate-qr-code",
+      `${api}/generate-qr-code`,
       validate(data_schema),
       this.generateQRCode.bind(this)
     );

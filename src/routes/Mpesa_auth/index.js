@@ -2,7 +2,7 @@ import Express from "express";
 import MpesaAuthorizationController from "../../controllers/M-Auth/index.js";
 import validate from "../../middlewares/Resourse/index.js";
 import data_schema from "../../schemas/M-auth/index.js";
-
+const api = "";
 class MpesaAuthorizationRoutes {
   constructor() {
     this.router = Express.Router();
@@ -11,7 +11,7 @@ class MpesaAuthorizationRoutes {
 
   initializeRoutes() {
     this.router.post(
-      "/get-token/",
+      `${api}/get-token/`,
       validate(data_schema),
       this.getAuthorization.bind(this)
     );

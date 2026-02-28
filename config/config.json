@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "neondb_owner",
+    "password": "npg_zqjXJ8nsE3Fd",
+    "database": "neondb",
+    "host": "ep-flat-bar-aba7x6f8-pooler.eu-west-2.aws.neon.tech",
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}
