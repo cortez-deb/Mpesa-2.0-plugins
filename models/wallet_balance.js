@@ -16,7 +16,8 @@ Wallet_Balance.init(
       type:DataTypes.FLOAT
     },
     chamaa_id:{
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull:false
     },
     createdAt:{
       allowNull: false,
@@ -32,7 +33,7 @@ Wallet_Balance.init(
   {
     sequelize,
     modelName:'Wallet_Balance',
-    underscored:true,
+    underscored:false,
     freezeTableName:true, 
     tableName:'wallet_balances'
   }

@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       transaction_id: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique:true
       },
       amount: {
         type: Sequelize.FLOAT

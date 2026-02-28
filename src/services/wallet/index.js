@@ -9,13 +9,33 @@ class WalletService {
             const walletEntry = await Wallets.create(data, { transaction });
 
             // Update Wallet_Balance
-            let balanceRecord = await Wallet_Balance.findOne({ where: { user_id: data.user_id }, transaction });
+            let balanceRecord = await Wallet_Balance.findOne({
+                where: { user_id: data.user_id, chamaa_id: data.chamaa_id },
+                transaction
+            });
+            console.log("balance found proceeding to calculate", balanceRecord?.dataValues)
+
+            // Calculate the adjustment based on debit or credit
+            const adjustment = data.is_debit ? -data.amount : +data.amount;
+            console.log('Adjustment: ' + adjustment);
 
             if (!balanceRecord) {
-                const balance = await this.getTotalBalnceByUserId(data.user_id);
-                balanceRecord = await Wallet_Balance.create({ user_id: data.user_id, amount: balance }, { transaction });
+                // If no balance record exists, create one with the adjustment
+                balanceRecord = await Wallet_Balance.create({
+                    user_id: data.user_id,
+                    amount: adjustment,
+                    chamaa_id: data.chamaa_id
+                }, { transaction });
+                console.log('New balance record created with amount: ' + adjustment);
+            } else {
+                // If balance record exists, ADD the adjustment to the existing amount
+                const newAmount = balanceRecord.amount + adjustment;
+                balanceRecord.set({ amount: newAmount });
+                console.log("updated balance from " + balanceRecord.dataValues.amount + " to " + newAmount);
             }
+
             await balanceRecord.save({ transaction });
+            await walletEntry.save({ transaction })
 
             await transaction.commit();
             return walletEntry;
@@ -26,8 +46,19 @@ class WalletService {
     }
     async getWalletBalanceByUserId(userId) {
         try {
-            const balanceRecord = await Wallet_Balance.findOne({ where: { user_id: userId } });
+            const balanceRecord = await Wallet_Balance.sum("amount", { where: { user_id: userId } });
             return balanceRecord ? balanceRecord.amount : 0;
+        } catch (error) {
+            throw new Error('Error fetching wallet balance: ' + error.message);
+        }
+    }
+    async getWalletBalanceByUserIdChamaa(userId, chamaa_id) {
+        try {
+            const balanceRecord = await Wallet_Balance.findOne({
+                where: { user_id: userId, chamaa_id: chamaa_id },
+                transaction
+            });
+            return balanceRecord
         } catch (error) {
             throw new Error('Error fetching wallet balance: ' + error.message);
         }
@@ -36,6 +67,14 @@ class WalletService {
     async getWalletEntriesByUserId(userId) {
         try {
             const entries = await Wallets.findAll({ where: { user_id: userId } });
+            return entries;
+        } catch (error) {
+            throw new Error('Error fetching wallet entries: ' + error.message);
+        }
+    }
+    async getWalletBalanceByUserIdChamaa_id(user_id, chamaa_id) {
+        try {
+            const entries = await Wallets.findAll({ where: { user_id: user_id, chamaa_id: chamaa_id } });
             return entries;
         } catch (error) {
             throw new Error('Error fetching wallet entries: ' + error.message);
@@ -123,8 +162,8 @@ class WalletService {
     }
     async getTotalBalnceByChamaaId(chamaaId) {
         try {
-            const credits = await Wallets.sum('is_credit', { where: { chamaa_id: chamaaId, is_credit: true } });
-            const debits = await Wallets.sum('is_debit', { where: { chamaa_id: chamaaId, is_debit: true } });
+            const credits = await Wallets.sum('amount', { where: { chamaa_id: chamaaId, is_credit: true } });
+            const debits = await Wallets.sum('amount', { where: { chamaa_id: chamaaId, is_debit: true } });
             return (credits || 0) - (debits || 0);
         } catch (error) {
             throw new Error('Error calculating total balance: ' + error.message);
@@ -132,8 +171,11 @@ class WalletService {
     }
     async getTotalBalnceByUserId(userId) {
         try {
-            const credits = await Wallets.sum('is_credit', { where: { user_id: userId, is_credit: true } });
-            const debits = await Wallets.sum('is_debit', { where: { user_id: userId, is_debit: true } });
+            console.log("calculating sum credit and debit for user " + userId)
+            const credits = await Wallets.sum('amount', { where: { user_id: userId, is_credit: true } });
+            console.log('credits', credits)
+            const debits = await Wallets.sum('amount', { where: { user_id: userId, is_debit: true } });
+            console.log('debits', debits)
             return (credits || 0) - (debits || 0);
         } catch (error) {
             throw new Error('Error calculating total balance by user: ' + error.message);
@@ -141,7 +183,7 @@ class WalletService {
     }
     async sumCreditsByChamaaId(chamaaId) {
         try {
-            const totalCredits = await Wallets.sum('is_credit', { where: { chamaa_id: chamaaId, is_credit: true } });
+            const totalCredits = await Wallets.sum('amount', { where: { chamaa_id: chamaaId, is_credit: true } });
             return totalCredits || 0;
         } catch (error) {
             throw new Error('Error summing credits: ' + error.message);
@@ -149,7 +191,7 @@ class WalletService {
     }
     async sumDebitsByChamaaId(chamaaId) {
         try {
-            const totalDebits = await Wallets.sum('is_debit', { where: { chamaa_id: chamaaId, is_debit: true } });
+            const totalDebits = await Wallets.sum('amount', { where: { chamaa_id: chamaaId, is_debit: true } });
             return totalDebits || 0;
         } catch (error) {
             throw new Error('Error summing debits: ' + error.message);

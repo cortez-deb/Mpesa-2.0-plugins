@@ -16,7 +16,11 @@ Wallets.init(
       type:DataTypes.BOOLEAN
     },
     transaction_id:{
-      type:DataTypes.STRING
+      type:DataTypes.STRING,
+      unique:true
+    },
+    amount:{
+       type: DataTypes.DECIMAL(10,4)
     },
     chamaa_id:{
       type:DataTypes.STRING
@@ -44,7 +48,7 @@ Wallets.init(
   {
     sequelize,
     modelName:'Wallets',
-    underscored:true,
+    underscored:false,
     freezeTableName:true, 
     tableName:'wallets'
   }

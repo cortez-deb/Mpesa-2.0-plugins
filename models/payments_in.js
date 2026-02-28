@@ -54,7 +54,7 @@ Payments_in.init(
   {
     sequelize,
     modelName:'Payments_in',
-    underscored:true,
+    underscored:false,
     freezeTableName:true,
     tableName:'payments_in'
   }

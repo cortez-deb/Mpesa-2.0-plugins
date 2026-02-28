@@ -13,13 +13,17 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       transaction_id: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique:true
       },
       chamaa_id: {
         type: Sequelize.STRING
       },
       user_id: {
         type: Sequelize.STRING
+      },
+      amount:{
+        type:Sequelize.DECIMAL(10,4)
       },
       date: {
         type: Sequelize.DATE

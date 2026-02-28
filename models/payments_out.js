@@ -16,7 +16,8 @@ Payments_Out.init(
       type:DataTypes.STRING
     },
     transaction_id:{
-      type:DataTypes.STRING
+      type:DataTypes.STRING,
+      unique:true
     },
     amount:{
       type:DataTypes.FLOAT
@@ -55,7 +56,7 @@ Payments_Out.init(
   {
     sequelize,
     modelName:'Payments_Out',
-    underscored:true,
+    underscored:false,
     freezeTableName:true,
     tableName:'payments_out'
   }

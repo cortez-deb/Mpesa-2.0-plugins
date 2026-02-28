@@ -12,10 +12,28 @@ class WalletRoutes {
             `${api}/wallet/`,
             WalletController.createWalletEntry
         );
+        //all user transactions
         this.router.get(
-            `${api}/wallet/user/:userId`,
+            `${api}/wallet/transactions/user/:userId`,
             WalletController.getWalletEntriesByUserId
         );
+        //user's total money in all chamaas
+        this.router.get(
+            `${api}/wallet/user/balance/:userId`,
+            WalletController.getWalletBalanceByUserId
+        );
+        //user's balance in a chamaa
+        this.router.get(
+            `${api}/wallet/user/balance/:userId/:chamaaId`,
+            WalletController.getWalletBalanceByUserIdChamaa_id
+        );
+        //user's transactions in chamaa
+        this.router.get(
+            `${api}/wallet/user/transactions/:userId/:chamaaId`,
+            WalletController.getWalletBalanceByUserIdChamaa_id
+        );
+        
+      
         this.router.put(
             `${api}/wallet/:id`,
             WalletController.updateWalletEntry
