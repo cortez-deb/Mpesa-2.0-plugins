@@ -13,8 +13,31 @@ class WalletController {
     }
     static async getWalletEntriesByUserId(req, res) {
         try {
+            const {page, limit,startDate, endDate} = req.body;
+            console.log(req.body,req.params.userId)
+            const pagination = {
+                limit: parseInt(limit) || 10,
+                offset: (parseInt(page) - 1 || 0) * (parseInt(limit) || 10)
+            };
 
-            const entries = await WalletService.getWalletEntriesByUserId(req.params.userId);
+            const entries = await WalletService.getWalletEntriesByUserId(req.params.userId,startDate, endDate, pagination);
+            return ResponseService.success(res, entries, "Wallet entries fetched successfully");
+        } catch (error) {
+            console.error(error);
+            return ResponseService.error(res, 'Failed to fetch wallet entries: ' + error.message);
+        }
+    }
+    static async getWalletEntriesByUserIdChamaaID(req, res) {
+        try {
+            const { userId, chamaaId,startDate, endDate,page, limit } = req.body; 
+            if (!userId || !chamaaId || !startDate || !endDate) {
+                return ResponseService.error(res, 'Missing required parameters: userId, chamaaId, startDate, endDate');
+            }
+            const pagination = {
+                limit: parseInt(limit) || 10,
+                offset: (parseInt(page) - 1 || 0) * (parseInt(limit) || 10)
+            };
+            const entries = await WalletService.getWalletEntriesByUserIdChamaaID(userId, chamaaId, startDate, endDate, pagination);
             return ResponseService.success(res, entries, "Wallet entries fetched successfully");
         } catch (error) {
             console.error(error);
@@ -23,7 +46,7 @@ class WalletController {
     }
     static async getWalletBalanceByUserIdChamaa_id(req, res) {
         try {
-            const entries = await WalletService.getWalletBalanceByUserIdChamaa_id(req.params.userId, req.params.chamaaId);
+            const entries = await WalletService.getWalletBalanceByUserIdChamaa(req.params.userId, req.params.chamaaId);
             return ResponseService.success(res, entries, "Wallet entries fetched successfully");
         } catch (error) {
             console.error(error);

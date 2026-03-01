@@ -13,7 +13,7 @@ class WalletRoutes {
             WalletController.createWalletEntry
         );
         //all user transactions
-        this.router.get(
+        this.router.post(
             `${api}/wallet/transactions/user/:userId`,
             WalletController.getWalletEntriesByUserId
         );
@@ -28,9 +28,9 @@ class WalletRoutes {
             WalletController.getWalletBalanceByUserIdChamaa_id
         );
         //user's transactions in chamaa
-        this.router.get(
-            `${api}/wallet/user/transactions/:userId/:chamaaId`,
-            WalletController.getWalletBalanceByUserIdChamaa_id
+        this.router.post(
+            `${api}/wallet/user/transactions/chamaa`,
+            WalletController.getWalletEntriesByUserIdChamaaID
         );
         
       

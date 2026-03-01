@@ -5,7 +5,6 @@ class WalletService {
     async createWalletEntry(data) {
         try {
             const transaction = await Wallets.sequelize.transaction();
-
             const walletEntry = await Wallets.create(data, { transaction });
 
             // Update Wallet_Balance
@@ -47,7 +46,8 @@ class WalletService {
     async getWalletBalanceByUserId(userId) {
         try {
             const balanceRecord = await Wallet_Balance.sum("amount", { where: { user_id: userId } });
-            return balanceRecord ? balanceRecord.amount : 0;
+            console.log("balance record for user " + userId + ": " + balanceRecord)
+            return balanceRecord ? balanceRecord : 0;
         } catch (error) {
             throw new Error('Error fetching wallet balance: ' + error.message);
         }
@@ -55,8 +55,7 @@ class WalletService {
     async getWalletBalanceByUserIdChamaa(userId, chamaa_id) {
         try {
             const balanceRecord = await Wallet_Balance.findOne({
-                where: { user_id: userId, chamaa_id: chamaa_id },
-                transaction
+                where: { user_id: userId, chamaa_id: chamaa_id }
             });
             return balanceRecord
         } catch (error) {
@@ -64,10 +63,24 @@ class WalletService {
         }
     }
 
-    async getWalletEntriesByUserId(userId) {
+    async getWalletEntriesByUserId(userId, startDate, endDate, pagination = { limit: 10, offset: 0 }) {
         try {
-            const entries = await Wallets.findAll({ where: { user_id: userId } });
-            return entries;
+            const entries = await Wallets.findAll({
+                where: { 
+                    user_id: userId,
+                    createdAt: {
+                        [Op.between]: [startDate, endDate]
+                    }
+                },
+                limit: pagination.limit,
+                offset: pagination.offset
+            });
+            return {
+                entries,
+                total: entries.length,
+                limit: pagination.limit,
+                offset: pagination.offset
+            };
         } catch (error) {
             throw new Error('Error fetching wallet entries: ' + error.message);
         }
@@ -205,17 +218,25 @@ class WalletService {
             throw new Error('Error fetching wallet entry: ' + error.message);
         }
     }
-    async getWalletEntriesByDateRange(userId, startDate, endDate) {
+    async getWalletEntriesByUserIdChamaaID(userId, chamaaId, startDate, endDate, pagination = { limit: 10, offset: 0 }) {
         try {
             const entries = await Wallets.findAll({
                 where: {
                     user_id: userId,
+                    chamaa_id: chamaaId,
                     date: {
                         [Op.between]: [startDate, endDate]
                     }
-                }
+                },
+                limit: pagination.limit,
+                offset: pagination.offset
             });
-            return entries;
+            return {
+                entries,
+                total: entries.length,
+                limit: pagination.limit,
+                offset: pagination.offset
+            }
         } catch (error) {
             throw new Error('Error fetching wallet entries by date range: ' + error.message);
         }
