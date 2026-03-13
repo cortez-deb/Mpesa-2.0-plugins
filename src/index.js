@@ -1,5 +1,5 @@
 import Express from 'express';
-// import cors from 'cors';
+import cors from 'cors';
 import 'dotenv/config';
 import route from '../src/routes/Mpesa_auth/index.js'; 
 import route_qr from '../src/routes/Mpesa_Dynamic_qr/index.js'
@@ -12,14 +12,13 @@ const app = Express();
 /**
  * Consfigure the cores to accept requests from defined IPs and domains
  */
-// app.use(
-//   cors({
-//     origin: [
-    
-//     ],
-//     credentials: false,
-//   })
-// );
+app.use(
+  cors({
+    origin: "*", // Allow all origins
+  })
+);
+
+
 /**
  * @description
  * Configure your application to use json

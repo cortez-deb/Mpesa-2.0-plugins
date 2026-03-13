@@ -1,0 +1,14 @@
+# .dockerignore — place a copy of this in each service repo root
+node_modules
+npm-debug.log*
+yarn-error.log*
+.env
+.env.*
+.git
+.gitignore
+*.md
+.DS_Store
+dist
+build
+coverage
+.nyc_output
